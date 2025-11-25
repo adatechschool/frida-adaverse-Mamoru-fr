@@ -1,27 +1,26 @@
-// import {NextRequest, NextResponse} from "next/server";
-// import db from "@/lib/db";
-// import {adaProjects} from "@/lib/db/schema";
-// import {eq} from "drizzle-orm";
+import {NextRequest, NextResponse} from "next/server";
+import db from "@/lib/db";
+import {adaProjects} from "@/lib/db/schema";
+import {eq} from "drizzle-orm";
 
 // // GET /api/ada-project/[id] - Fetch a single project by ID
-// export async function GET(
-//     req: NextRequest,
-//     {params}: {params: Promise<{id: string}>}
-// ) {
-//     // Extract the project ID from route parameters
-//     const {id} = await params;
-//     const projectId = Number(id);
+export async function GET(
+    req: NextRequest,
+    {params}: {params: Promise<{id: string}>}
+) {
+    // Extract the project ID from route parameters
+    const {id} = await params;
+    const projectId = Number(id);
     
-//     console.log(`[Ada Project - GET] Fetching project with ID: ${projectId}`);
+    console.log(`[Ada Project - GET] Fetching project with ID: ${projectId}`);
 
-//     // Query the database for the specific project
-//     const projectData = await db.select().from(adaProjects).where(eq(adaProjects.id, projectId));
+    // Query the database for the specific project
+    const projectData = await db.select().from(adaProjects).where(eq(adaProjects.id, projectId));
     
-//     console.log(`[Ada Project - GET] Found ${projectData.length} project(s)`);
+    console.log(`[Ada Project - GET] Found ${projectData.length} project(s)`);
 
-//     return NextResponse.json(projectData);
-
-// }
+    return NextResponse.json(projectData);
+}
 
 // // DELETE /api/ada-project/[id] - Delete a project by ID
 // export async function DELETE(

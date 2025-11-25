@@ -1,18 +1,18 @@
-// import db from "@/lib/db";
-// import {adaProjects} from "@/lib/db/schema";
-// import { NextResponse } from "next/server";
+import db from "@/lib/db";
+import {adaProjects} from "@/lib/db/schema";
+import { NextResponse } from "next/server";
 // import { normalizeText } from "@/utils/normalizeText";
 
-// // GET /api/ada-project - Fetch all projects
-// export async function GET() {
-//     console.log('[Ada Project - GET] Fetching all Ada projects');
+// GET /api/ada-project - Fetch all projects
+export async function GET() {
+    console.log('[Ada Project - GET] Fetching all Ada projects');
     
-//     const projects = await db.select().from(adaProjects);
+    const projects = await db.select().from(adaProjects);
     
-//     console.log(`[Ada Project - GET] Retrieved ${projects.length} project(s)`);
+    console.log(`[Ada Project - GET] Retrieved ${projects.length} project(s)`);
     
-//     return NextResponse.json(projects);
-// };
+    return NextResponse.json(projects);
+};
 
 // // POST /api/ada-project - Create a new project
 // export async function POST(request: Request) {

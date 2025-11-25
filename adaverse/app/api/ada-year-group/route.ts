@@ -1,19 +1,19 @@
-// import db from "@/lib/db";
-// import {adaPromotions} from "@/lib/db/schema";
-// import { NextResponse } from "next/server";
+import db from "@/lib/db";
+import {adaPromotions} from "@/lib/db/schema";
+import { NextResponse } from "next/server";
 // import { normalizeText } from "@/utils/normalizeText";
 // import { normalizeDate } from "@/utils/normalizeDate";
 
-// // GET /api/ada-project - Fetch all projects
-// export async function GET() {
-//     console.log('[Ada Year Group - GET] Fetching all Ada year groups');
+// GET /api/ada-year-group - Fetch all year groups
+export async function GET() {
+    console.log('[Ada Year Group - GET] Fetching all Ada year groups');
     
-//     const yearGroups = await db.select().from(adaPromotions).orderBy(adaPromotions.startDate);
+    const yearGroups = await db.select().from(adaPromotions).orderBy(adaPromotions.startDate);
     
-//     console.log(`[Ada Year Group - GET] Retrieved ${yearGroups.length} year group(s)`);
+    console.log(`[Ada Year Group - GET] Retrieved ${yearGroups.length} year group(s)`);
     
-//     return NextResponse.json(yearGroups);
-// };
+    return NextResponse.json(yearGroups);
+};
 
 // // POST /api/ada-project - Create a new project
 // export async function POST(request: Request) {
