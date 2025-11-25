@@ -1,4 +1,4 @@
-import { pgTable as table, serial, text, timestamp, date } from "drizzle-orm/pg-core";
+import { pgTable as table, serial, text, timestamp, date, integer } from "drizzle-orm/pg-core";
 
 /**
  * Ada Projects Table
@@ -25,9 +25,9 @@ export const adaPromotions = table("ada_promotions", {
  */
 export const Students = table("students", {
   id: serial("id").primaryKey(), // Auto-incrementing primary key
-  Name : text("name").notNull(), // Student's full name
-  GithubUsername : text("github_username").notNull(), // GitHub username for portfolio tracking
-  promotionId : serial("promotion_id") // Foreign key to promotions
+  name : text("name").notNull(), // Student's full name
+  githubUsername : text("github_username").notNull(), // GitHub username for portfolio tracking
+  promotionId : integer("promotion_id") // Foreign key to promotions
     .notNull()
     .references(() => adaPromotions.id), // Links student to their cohort
 });
@@ -37,12 +37,12 @@ export const Students = table("students", {
  * Links students to their individual project submissions
  * One student can have multiple projects, one project type can have multiple student submissions
  */
-export const ProjectsStudents = table("projects_students", {
+export const Projects = table("projects_students", {
     id: serial("id").primaryKey(), // Auto-incrementing primary key
     title : text("title").notNull(), // Custom title given by student to their project
     image: text("image").notNull(), // URL or path to project thumbnail/screenshot
     URLName : text("url_name").notNull(), // URL-friendly slug for the project
-    adaProjectID : serial("ada_project_id") // Foreign key to ada_projects table
+    adaProjectID : integer("ada_project_id") // Foreign key to ada_projects table
       .references(() => adaProjects.id),
     githubRepoURL : text("github_repo_url").notNull(), // Link to the GitHub repository
     demoURL : text("demo_url"), // Optional: Link to live demo or deployed version
@@ -57,10 +57,10 @@ export const ProjectsStudents = table("projects_students", {
  */
 export const StudentToProjects = table("student_to_projects", {
   id: serial("id").primaryKey(),
-  studentId: serial("student_id")
+  studentId: integer("student_id")
     .notNull()
     .references(() => Students.id, { onDelete: 'cascade' }), // Auto-delete when student is deleted
-  projectStudentId: serial("project_student_id")
+  projectStudentId: integer("project_student_id")
     .notNull()
-    .references(() => ProjectsStudents.id, { onDelete: 'cascade' }), // Auto-delete when project is deleted
+    .references(() => Projects.id, { onDelete: 'cascade' }), // Auto-delete when project is deleted
 });

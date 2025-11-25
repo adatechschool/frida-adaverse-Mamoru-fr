@@ -6,70 +6,70 @@ import { NextResponse } from "next/server";
 
 // GET /api/ada-year-group - Fetch all year groups
 export async function GET() {
-    console.log('[Ada Year Group - GET] Fetching all Ada year groups');
+    console.log('[Ada Promotions - GET] Fetching all Ada year groups');
     
-    const yearGroups = await db.select().from(adaPromotions).orderBy(adaPromotions.startDate);
+    const promotions = await db.select().from(adaPromotions).orderBy(adaPromotions.startDate);
     
-    console.log(`[Ada Year Group - GET] Retrieved ${yearGroups.length} year group(s)`);
+    console.log(`[Ada Promotions - GET] Retrieved ${promotions.length} year group(s)`);
     
-    return NextResponse.json(yearGroups);
+    return NextResponse.json(promotions);
 };
 
-// // POST /api/ada-project - Create a new project
+// // POST /api/ada-promotions - Create a new promotion
 // export async function POST(request: Request) {
-//     // Parse the request body to get project name
+//     // Parse the request body to get promotion name
 //     const { promotionName, startDate } = await request.json();
     
-//     console.log(`[Ada Year Group - POST] Creating new year group: "${promotionName}" starting on ${startDate}`);
+//     console.log(`[Ada Promotions - POST] Creating new promotion: "${promotionName}" starting on ${startDate}`);
 
 //     // Normalize the input project name (lowercase, remove accents, trim)
 //     const normalizedInput = normalizeText(promotionName);
 
 //     // Check if a project with the same name already exists (case-insensitive, accent-insensitive)
-//     const allYearGroups = await db.select().from(adaPromotions);
-//     const existingNamePromotions = allYearGroups.find(
+//     const allPromotions = await db.select().from(adaPromotions);
+//     const existingNamePromotions = allPromotions.find(
 //         promotions => normalizeText(promotions.promotionName) === normalizedInput
-//     );
+// );
 
 //     if (existingNamePromotions) {
-//         console.log(`[Ada Year Group - POST] Year group "${promotionName}" already exists (normalized match with "${existingNamePromotions.promotionName}")`);
+//         console.log(`[Ada Promotions - POST] Promotion "${promotionName}" already exists (normalized match with "${existingNamePromotions.promotionName}")`);
 //         return NextResponse.json(
 //             {
 //                 success: false,
-//                 message: `Year group '${promotionName}' already exists.`,
+//                 message: `Promotion '${promotionName}' already exists.`,
 //             },
 //             { status: 409 } // 409 Conflict status code
 //         );
 //     }
 
-//     const existingStartDatePromotions = allYearGroups.find(
+//     const existingStartDatePromotions = allPromotions.find(
 //         promotions => normalizeDate(promotions.startDate) === normalizeDate(startDate)
 //     );
 
 //     if (existingStartDatePromotions) {
-//         console.log(`[Ada Year Group - POST] A year group with start date "${startDate}" already exists: "${existingStartDatePromotions.promotionName}"`);
+//         console.log(`[Ada Promotions - POST] A promotion with start date "${startDate}" already exists: "${existingStartDatePromotions.promotionName}"`);
 //         return NextResponse.json(
 //             {
 //                 success: false,
-//                 message: `A year group with start date '${startDate}' already exists.`,
+//                 message: `A promotion with start date '${startDate}' already exists.`,
 //             },
 //             { status: 409 } // 409 Conflict status code
 //         );
 //     }
 
 //     // Insert the new project into the database (normalize date to ensure consistent format)
-//     const newYearGroup = await db.insert(adaPromotions).values({
+//     const newPromotion = await db.insert(adaPromotions).values({
 //         promotionName: promotionName, 
 //         startDate: normalizeDate(startDate),
 //     });
     
-//     console.log(`[Ada Year Group - POST] Successfully created year group: "${promotionName}"`);
+//     console.log(`[Ada Promotions - POST] Successfully created promotion: "${promotionName}"`);
 //     return NextResponse.json({
 //         success: true,
-//         yearGroup: {
-//             yearGroupName : promotionName,
+//         promotion: {
+//             promotionName : promotionName,
 //             startDate: normalizeDate(startDate)
 //         },
-//         message: `Year group '${promotionName}' starting on ${startDate} has been created.`,
+//         message: `Promotion '${promotionName}' starting on ${startDate} has been created.`,
 //     });
 // }

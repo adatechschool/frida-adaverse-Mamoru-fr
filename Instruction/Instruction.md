@@ -137,7 +137,7 @@ Une **seed** permet d’ajouter des données de base dans la base de données.
 
 -   [x] Créer un script `.sql` pour insérer les **promotions Ada**
 -   [x] Créer un script `.sql` pour insérer les **projets Ada**
--   [x] Créer un script `.sql` permettant de **publier un projet** (en mettant à jour sa date de publication selon son identifiant)
+-   [ ] Créer un script `.sql` permettant de **publier un projet** (en mettant à jour sa date de publication selon son identifiant)
 
 ### 3. 💻 Intégration sur le site
 

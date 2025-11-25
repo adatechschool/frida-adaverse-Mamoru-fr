@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
 import { Project } from "@/content/project";
-import { ProjectsStudents, StudentToProjects, Students } from "@/lib/db/schema";
+import { Projects, StudentToProjects, Students } from "@/lib/db/schema";
 
 export async function GET() {
     console.log('[Student Project - GET] Fetching all student projects');
 
     // Fetch all projects
-    const studentProjects = await db.select().from(ProjectsStudents);
+    const studentProjects = await db.select().from(Projects);
 
     // For each project, fetch the associated students
     const projectsWithStudents: Project[] = await Promise.all(
@@ -33,8 +33,8 @@ export async function GET() {
                     const dbStudent = studentData[0];
                     return dbStudent && {
                         id: dbStudent.id,
-                        name: dbStudent.Name,
-                        githubUsername: dbStudent.GithubUsername,
+                        name: dbStudent.name,
+                        githubUsername: dbStudent.githubUsername,
                         promotionId: dbStudent.promotionId,
                     };
                 })
