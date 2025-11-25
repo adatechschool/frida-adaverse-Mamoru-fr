@@ -1,8 +1,8 @@
-import db from "@/lib/db";
-import {adaYearGroups} from "@/lib/db/schema";
+import db from "@/src/lib/db";
+import {adaYearGroups} from "@/src/lib/db/schema";
 import { NextResponse } from "next/server";
-import { normalizeText } from "@/utils/normalizeText";
-import { normalizeDate } from "@/utils/normalizeDate";
+import { normalizeText } from "@/src/utils/normalizeText";
+import { normalizeDate } from "@/src/utils/normalizeDate";
 
 // GET /api/ada-project - Fetch all projects
 export async function GET() {

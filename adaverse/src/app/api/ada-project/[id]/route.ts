@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import db from "@/lib/db";
-import {adaProjects} from "@/lib/db/schema";
+import db from "@/src/lib/db";
+import {adaProjects} from "@/src/lib/db/schema";
 import {eq} from "drizzle-orm";
 
 // GET /api/ada-project/[id] - Fetch a single project by ID

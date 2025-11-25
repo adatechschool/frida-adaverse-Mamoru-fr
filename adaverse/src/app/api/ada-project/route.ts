@@ -1,7 +1,7 @@
-import db from "@/lib/db";
-import {adaProjects} from "@/lib/db/schema";
+import db from "@/src/lib/db";
+import {adaProjects} from "@/src/lib/db/schema";
 import { NextResponse } from "next/server";
-import { normalizeText } from "@/utils/normalizeText";
+import { normalizeText } from "@/src/utils/normalizeText";
 
 // GET /api/ada-project - Fetch all projects
 export async function GET() {
