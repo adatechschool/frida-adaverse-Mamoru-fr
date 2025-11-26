@@ -24,3 +24,16 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hide scrollbar for horizontal scrolling */
+.scrollbar-hide {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+  width: 0;
+  height: 0;
+}

@@ -1,17 +1,40 @@
 import db from "@/lib/db";
 import {adaProjects} from "@/lib/db/schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { authenticateRequest } from "@/lib/middleware/apiAuth";
 // import { normalizeText } from "@/utils/normalizeText";
 
 // GET /api/ada-project - Fetch all projects
-export async function GET() {
+export async function GET(request: NextRequest) {
+    // Authenticate the request
+    const authResult = authenticateRequest(request);
+    if (authResult.error) return authResult.response;
+    
     console.log('[Ada Project - GET] Fetching all Ada projects');
+    
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+    };
     
     const projects = await db.select().from(adaProjects);
     
     console.log(`[Ada Project - GET] Retrieved ${projects.length} project(s)`);
     
-    return NextResponse.json(projects);
+    return NextResponse.json(projects, { headers });
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+        },
+    });
 };
 
 // // POST /api/ada-project - Create a new project

@@ -12,7 +12,7 @@ async function runSeed(filePath : string) {
 async function seed() {
     console.log('🗑️  Clearing existing data...');
     // Delete in correct order (children first, then parents)
-    await db.execute(sql`TRUNCATE TABLE student_to_projects, projects_students, students, ada_promotions, ada_projects RESTART IDENTITY CASCADE`);
+    await db.execute(sql`TRUNCATE TABLE students, ada_promotions, ada_projects RESTART IDENTITY CASCADE`);
     console.log('✅ Tables cleared');
     
     await runSeed('001_seed_promotions.sql');

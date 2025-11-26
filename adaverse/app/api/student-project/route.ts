@@ -1,12 +1,24 @@
 import db from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
+import { authenticateRequest } from "@/lib/middleware/apiAuth";
 
 import { Project } from "@/content/project";
 import { Projects, StudentToProjects, Students } from "@/lib/db/schema";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+    // Authenticate the request
+    const authResult = authenticateRequest(request);
+    if (authResult.error) return authResult.response;
+    
     console.log('[Student Project - GET] Fetching all student projects');
+
+    // Add CORS headers for cross-origin requests
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+    };
 
     // Fetch all projects
     const studentProjects = await db.select().from(Projects);
@@ -58,5 +70,17 @@ export async function GET() {
 
     console.log(`[Student Project - GET] Retrieved ${projectsWithStudents.length} student project(s)`);
 
-    return NextResponse.json(projectsWithStudents);
+    return NextResponse.json(projectsWithStudents, { headers });
+}
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+        },
+    });
 }

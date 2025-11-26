@@ -1,18 +1,41 @@
 import db from "@/lib/db";
 import {adaPromotions} from "@/lib/db/schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { authenticateRequest } from "@/lib/middleware/apiAuth";
 // import { normalizeText } from "@/utils/normalizeText";
 // import { normalizeDate } from "@/utils/normalizeDate";
 
 // GET /api/ada-year-group - Fetch all year groups
-export async function GET() {
+export async function GET(request: NextRequest) {
+    // Authenticate the request
+    const authResult = authenticateRequest(request);
+    if (authResult.error) return authResult.response;
+    
     console.log('[Ada Promotions - GET] Fetching all Ada year groups');
+    
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+    };
     
     const promotions = await db.select().from(adaPromotions).orderBy(adaPromotions.startDate);
     
     console.log(`[Ada Promotions - GET] Retrieved ${promotions.length} year group(s)`);
     
-    return NextResponse.json(promotions);
+    return NextResponse.json(promotions, { headers });
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+        },
+    });
 };
 
 // // POST /api/ada-promotions - Create a new promotion

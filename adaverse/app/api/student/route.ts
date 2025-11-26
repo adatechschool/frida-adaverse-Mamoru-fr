@@ -1,17 +1,40 @@
 import db from "@/lib/db";
 import {Students} from "@/lib/db/schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { normalizeText } from "@/utils/normalizeText";
+import { authenticateRequest } from "@/lib/middleware/apiAuth";
 
 // GET /api/students - Fetch all students
-export async function GET() {
+export async function GET(request: NextRequest) {
+    // Authenticate the request
+    const authResult = authenticateRequest(request);
+    if (authResult.error) return authResult.response;
+    
     console.log('[Students - GET] Fetching all students');
+    
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+    };
     
     const students = await db.select().from(Students);
     
     console.log(`[Students - GET] Retrieved ${students.length} student(s)`);
     
-    return NextResponse.json(students);
+    return NextResponse.json(students, { headers });
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+        },
+    });
 };
 
 // POST /api/students - Create a new student
