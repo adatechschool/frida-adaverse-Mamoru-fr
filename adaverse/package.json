@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx lib/db/seed.ts",
-    "migrate": "npx drizzle-kit generate && npx drizzle-kit push"
+    "migrate": "npx drizzle-kit generate && npx drizzle-kit push",
+    "approve": "tsx lib/db/approve-projects.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",

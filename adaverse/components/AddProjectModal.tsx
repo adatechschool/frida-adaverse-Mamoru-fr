@@ -20,11 +20,39 @@ export default function AddProjectModal() {
 
     if (!isModalOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form data:', formData);
-        // TODO: API request will be added here when approved
-        alert('Formulaire soumis ! (API non connectée)');
+        
+        try {
+            const res = await fetch('/api/pending-project', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (res.ok) {
+                alert('✅ Projet ajouté à la liste d\'attente pour approbation !');
+                toggleModal();
+                setFormData({
+                    title: '',
+                    image: '',
+                    URLName: '',
+                    adaProjectID: '',
+                    githubRepoURL: '',
+                    demoURL: '',
+                    publishedAt: '',
+                    studentIds: '',
+                });
+            } else {
+                alert('❌ Erreur lors de l\'ajout du projet');
+            }
+        } catch (error) {
+            console.error('[AddProjectModal] Error:', error);
+            alert('❌ Erreur de connexion');
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

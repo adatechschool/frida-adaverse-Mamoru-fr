@@ -64,3 +64,21 @@ export const StudentToProjects = table("student_to_projects", {
     .notNull()
     .references(() => Projects.id, { onDelete: 'cascade' }), // Auto-delete when project is deleted
 });
+
+/**
+ * Pending Projects Table
+ * Stores project submissions awaiting approval
+ * These are added via the "Add Project" form and need admin approval before being moved to projects_students
+ */
+export const PendingProjects = table("pending_projects", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  image: text("image").notNull(),
+  URLName: text("url_name").notNull(),
+  adaProjectID: integer("ada_project_id").references(() => adaProjects.id),
+  githubRepoURL: text("github_repo_url").notNull(),
+  demoURL: text("demo_url"),
+  studentIds: text("student_ids").notNull(), // Comma-separated student IDs (e.g., "1,2,3")
+  createdAt: timestamp().defaultNow().notNull(),
+  publishedAt: timestamp(),
+});
