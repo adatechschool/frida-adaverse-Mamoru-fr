@@ -66,33 +66,33 @@ Pour mener à bien ce projet, il est nécessaire de maîtriser :
 
 ### Back / BDD
 
--   [ ] Je sais intégrer et utiliser une ORM avec NextJS
--   [ ] Je sais connecter mon ORM avec ma base de données
--   [ ] Je sais créer une base de donnée à partir d'un schéma
--   [ ] Je sais visualiser et modifier des données dans la base de données
--   [ ] Je comprends le fonctionnement d'un ORM (mapping object relationnel)
--   [ ] Je sais modéliser une base de données à partir d'un énoncé
--   [ ] Je comprends les avantages et les inconvénients que l'ORM apporte
--   [ ] J'arrive à implémenter mon ORM dans mon code
--   [ ] Je sais récupérer des données venant de plusieurs tables avec l'ORM (foreign keys)
--   [ ] Je sais faire un CRUD de ma donnée avec mon ORM
--   [ ] Je sais créer des routes api et des composants serveur dans NextJS
--   [ ] Je sais créer et exécuter des migrations
+-   [x] Je sais intégrer et utiliser une ORM avec NextJS
+-   [x] Je sais connecter mon ORM avec ma base de données
+-   [x] Je sais créer une base de donnée à partir d'un schéma
+-   [x] Je sais visualiser et modifier des données dans la base de données
+-   [x] Je comprends le fonctionnement d'un ORM (mapping object relationnel)
+-   [x] Je sais modéliser une base de données à partir d'un énoncé
+-   [x] Je comprends les avantages et les inconvénients que l'ORM apporte
+-   [x] J'arrive à implémenter mon ORM dans mon code
+-   [x] Je sais récupérer des données venant de plusieurs tables avec l'ORM (foreign keys)
+-   [x] Je sais faire un CRUD de ma donnée avec mon ORM
+-   [x] Je sais créer des routes api et des composants serveur dans NextJS
+-   [x] Je sais créer et exécuter des migrations
 -   [ ] Je sais créer et manipuler des forms actions
 
 ### Front
 
--   [ ] Je peux créer une page dans NextJS
+-   [x] Je peux créer une page dans NextJS
 -   [ ] Je comprends l'utilité du `"use client"`
--   [ ] Je comprends comment et quand utiliser useState et useEffect
--   [ ] Je sais fetch des routes API depuis une page NextJS
--   [ ] Je sais découper le code de mon projet en plusieurs fichiers
--   [ ] Je comprends le système de routes de NextJS
--   [ ] Je sais créer des routes dynamiques avec des paramètres d'URL
--   [ ] Je sais récuperer le paramètre avec `params`
--   [ ] Je sais comment utiliser `Link` pour naviguer entre les pages côté client
--   [ ] Je sais faire la différence entre une route statique et dynamique
--   [ ] Je sais appliquer du style à mes composants avec tailwind
+-   [x] Je comprends comment et quand utiliser useState et useEffect
+-   [x] Je sais fetch des routes API depuis une page NextJS
+-   [x] Je sais découper le code de mon projet en plusieurs fichiers
+-   [x] Je comprends le système de routes de NextJS
+-   [x] Je sais créer des routes dynamiques avec des paramètres d'URL
+-   [x] Je sais récuperer le paramètre avec `params`
+-   [x] Je sais comment utiliser `Link` pour naviguer entre les pages côté client
+-   [x] Je sais faire la différence entre une route statique et dynamique
+-   [x] Je sais appliquer du style à mes composants avec tailwind
 -   [ ] Je sais créer un dialogue
 
 ## 🧩 Fonctionnalités à développer
@@ -135,8 +135,8 @@ Une **seed** permet d’ajouter des données de base dans la base de données.
 
 #### Tâches à réaliser
 
--   [ ] Créer un script `.sql` pour insérer les **promotions Ada**
--   [ ] Créer un script `.sql` pour insérer les **projets Ada**
+-   [x] Créer un script `.sql` pour insérer les **promotions Ada**
+-   [x] Créer un script `.sql` pour insérer les **projets Ada**
 -   [ ] Créer un script `.sql` permettant de **publier un projet** (en mettant à jour sa date de publication selon son identifiant)
 
 ### 3. 💻 Intégration sur le site
