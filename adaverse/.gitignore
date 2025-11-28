@@ -43,3 +43,5 @@ next-env.d.ts
 
 /drizzle
 lib/db/migrations/
+
+delete-student-project.ts

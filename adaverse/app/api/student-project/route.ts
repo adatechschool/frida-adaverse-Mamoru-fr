@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     // Add CORS headers for cross-origin requests
     const headers = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
         'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
     };
 

@@ -9,10 +9,12 @@
     "lint": "eslint",
     "seed": "tsx lib/db/seed.ts",
     "migrate": "npx drizzle-kit generate && npx drizzle-kit push",
-    "approve": "tsx lib/db/approve-projects.ts"
+    "approve": "tsx lib/db/approve-projects.ts",
+    "delete": "tsx lib/db/delete-student-project.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
+    "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
     "lucide-react": "^0.555.0",

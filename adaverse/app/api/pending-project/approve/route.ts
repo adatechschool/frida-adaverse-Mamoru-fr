@@ -42,17 +42,13 @@ export async function POST(request: NextRequest) {
         const sqlStatements = [];
 
         // 1. Insert into projects_students
-        const publishedAtSQL = project.publishedAt 
-            ? `'${project.publishedAt.toISOString()}'` 
-            : 'NOW()';
-
         sqlStatements.push(
             `-- Project ID ${project.id}: ${project.title}`,
             `DO $$`,
             `DECLARE`,
             `  project_id INT;`,
             `BEGIN`,
-            `  INSERT INTO projects_students (title, image, url_name, ada_project_id, github_repo_url, demo_url, "createdAt")`,
+            `  INSERT INTO projects_students (title, image, url_name, ada_project_id, github_repo_url, demo_url, "createdAt", "publishedAt")`,
             `  VALUES (`,
             `    '${project.title.replace(/'/g, "''")}',`,
             `    '${project.image.replace(/'/g, "''")}',`,
@@ -60,7 +56,8 @@ export async function POST(request: NextRequest) {
             `    ${project.adaProjectID || 'NULL'},`,
             `    '${project.githubRepoURL.replace(/'/g, "''")}',`,
             `    ${project.demoURL ? `'${project.demoURL.replace(/'/g, "''")}'` : 'NULL'},`,
-            `    ${publishedAtSQL}`,
+            `    '${project.createdAt ? project.createdAt.toISOString() : new Date().toISOString()}',`,
+            `    ${project.publishedAt ? project.publishedAt.toDateString() : 'NOW()'}`,
             `  )`,
             `  RETURNING id INTO project_id;`,
             ``
