@@ -12,7 +12,6 @@ export default function AddProjectModal() {
     const [formData, setFormData] = useState({
         title: '',
         image: '',
-        URLName: '',
         adaProjectID: '',
         githubRepoURL: '',
         demoURL: '',
@@ -85,7 +84,6 @@ export default function AddProjectModal() {
                 setFormData({
                     title: '',
                     image: '',
-                    URLName: '',
                     adaProjectID: '',
                     githubRepoURL: '',
                     demoURL: '',
@@ -146,23 +144,6 @@ export default function AddProjectModal() {
                             onChange={handleChange}
                             className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
                             placeholder="Mon Super Projet"
-                        />
-                    </div>
-
-                    {/* URL Name */}
-                    <div>
-                        <label htmlFor="URLName" className={`mb-2 block text-sm font-semibold ${CombinedColors.text.secondary}`}>
-                            Nom d'URL (apparaissant dans le lien) *
-                        </label>
-                        <input
-                            type="text"
-                            id="URLName"
-                            name="URLName"
-                            required
-                            value={formData.URLName}
-                            onChange={handleChange}
-                            className={`w-full rounded-md border ${CombinedColors.border.default} ${CombinedColors.background.cardAlt} px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500`}
-                            placeholder="mon-super-projet"
                         />
                     </div>
 

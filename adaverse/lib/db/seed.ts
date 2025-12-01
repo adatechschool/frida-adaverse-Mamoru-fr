@@ -39,8 +39,6 @@ async function seed() {
     // Backup projects_students and student_to_projects data
     console.log('📦 Backing up project data...');
     await backupDataToJson();
-    const projectsBackup = await db.execute(sql`SELECT * FROM projects_students`);
-    const studentToProjectsBackup = await db.execute(sql`SELECT * FROM student_to_projects`);
     
     // Truncate base tables (this will CASCADE and clear student_to_projects)
     await db.execute(sql`TRUNCATE TABLE students RESTART IDENTITY CASCADE`);
@@ -67,8 +65,8 @@ async function seed() {
             adaProjectID: row.ada_project_id as number,
             githubRepoURL: row.github_repo_url as string,
             demoURL: row.demo_url as string | null,
-            createdAt: row.created_at ? new Date(row.created_at as string) : undefined,
-            publishedAt: row.published_at ? new Date(row.published_at as string) : null,
+            createdAt: row.createdAt ? new Date(row.createdAt as string) : new Date(),
+            publishedAt: row.publishedAt ? new Date(row.publishedAt as string) : null,
         });
     }
     
