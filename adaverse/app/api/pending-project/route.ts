@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { PendingProjects } from '@/lib/db/schema';
+import { PendingProjects, Projects } from '@/lib/db/schema';
 import { authenticateRequest } from '@/lib/middleware/apiAuth';
 import { eq } from 'drizzle-orm';
+import { generateURLName } from '@/utils/generateURLName';
 
 /**
  * GET /api/pending-project
@@ -39,14 +40,39 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { title, image, URLName, adaProjectID, githubRepoURL, demoURL, studentIds, publishedAt } = body;
+        const { title, image, adaProjectID, githubRepoURL, demoURL, studentIds, publishedAt } = body;
 
         // Validate required fields
-        if (!title || !URLName || !githubRepoURL || !studentIds) {
+        if (!title || !githubRepoURL || !studentIds) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
             );
+        }
+
+        // Generate base URL name from title
+        let URLName = generateURLName(title);
+        console.log(`[Pending Projects - POST] Generated URLName from title "${title}": "${URLName}"`);
+
+        // Check if URLName already exists in both tables and make it unique
+        const existingProjects = await db.select().from(Projects);
+        const existingPending = await db.select().from(PendingProjects);
+        const allURLNames = [
+            ...existingProjects.map(p => p.URLName),
+            ...existingPending.map(p => p.URLName)
+        ];
+
+        // If URLName exists, append a number to make it unique
+        if (allURLNames.includes(URLName)) {
+            console.log(`[Pending Projects - POST] URLName "${URLName}" already exists, finding unique variant...`);
+            let counter = 1;
+            let newURLName = `${URLName}-${counter}`;
+            while (allURLNames.includes(newURLName)) {
+                counter++;
+                newURLName = `${URLName}-${counter}`;
+            }
+            URLName = newURLName;
+            console.log(`[Pending Projects - POST] Using unique URLName: "${URLName}"`);
         }
 
         const newPendingProject = await db.insert(PendingProjects).values({

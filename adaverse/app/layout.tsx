@@ -5,11 +5,10 @@ import {AdaProjectsProvider} from "@/context/AdaProjectsContext";
 import {StudentsProvider} from "@/context/StudentsContext";
 import {StudentProjectsProvider} from "@/context/StudentProjectsContext";
 import {ThemeProvider} from "@/context/ThemeContext";
-import TitleButton from "@/components/TitleButton";
-import ThemeToggle from "@/components/ThemeToggle";
 import {AddProjectProvider} from "@/context/AddProjectContext";
 import AddProjectModal from "@/components/AddProject/AddProjectModal";
-import AddProjectButton from "@/components/AddProject/AddProjectButton";
+import NavbarContent from "@/components/NavbarContent";
+import {PromotionFilterProvider} from "@/context/PromotionFilterContext";
 
 export const metadata: Metadata = {
   title: "AdaVerse",
@@ -31,21 +30,17 @@ export default function RootLayout({
               <StudentsProvider>
                 <StudentProjectsProvider>
                   <AddProjectProvider>
-                    <div className="min-h-screen bg-white dark:bg-neutral-950 font-sans text-neutral-900 dark:text-white transition-colors" >
-                      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 transition-colors">
-                        <div className="flex items-center justify-between px-8 py-4">
-                          <TitleButton />
-                          <div className="flex flex-row items-center gap-4">
-                            <AddProjectButton />
-                            <ThemeToggle />
-                          </div>
+                    <PromotionFilterProvider>
+                      <div className="min-h-screen bg-white dark:bg-neutral-950 font-sans text-neutral-900 dark:text-white transition-colors" >
+                        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 transition-colors">
+                          <NavbarContent />
+                        </nav>
+                        <div className="pt-20">
+                          {children}
                         </div>
-                      </nav>
-                      <div className="pt-20">
-                        {children}
+                        <AddProjectModal />
                       </div>
-                      <AddProjectModal />
-                    </div>
+                    </PromotionFilterProvider>
                   </AddProjectProvider>
                 </StudentProjectsProvider>
               </StudentsProvider>

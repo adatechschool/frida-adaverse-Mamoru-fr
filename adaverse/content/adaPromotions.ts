@@ -1,5 +1,5 @@
 export type AdaPromotion = {
     id : number;
-    name : string;
+    promotionName : string;
     startDate : string;
 }

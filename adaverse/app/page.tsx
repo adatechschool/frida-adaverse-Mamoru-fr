@@ -6,10 +6,12 @@ import {useAdaProjects} from "@/context/AdaProjectsContext";
 import {useStudentProjects} from "@/context/StudentProjectsContext";
 import {Loading} from "@/components/interactComponents/Loading";
 import {ErrorMessage} from "@/components/interactComponents/ErrorMessage";
+import {usePromotionFilter} from "@/context/PromotionFilterContext";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
   const {listStudentProjects, loading: studentProjectsLoading, error: studentProjectsError} = useStudentProjects();
+  const {selectedPromotion} = usePromotionFilter();
 
   // Show loading state
   if (projectsLoading || studentProjectsLoading) {
@@ -21,12 +23,20 @@ export default function Home() {
     return <ErrorMessage message={projectsError || studentProjectsError} />
   }
 
+  // Filter projects by promotion if selected
+  const filteredProjects = selectedPromotion 
+    ? listStudentProjects.filter((p: Project) => {
+        if (!p.students || p.students.length === 0) return false;
+        return p.students[0].promotionId === selectedPromotion;
+      })
+    : listStudentProjects;
+
   return (
     <div>
       {/* Categories */}
       <div className="space-y-10 px-8 py-16 md:px-16">
         {listAdaProjects.map((project: adaProject) => {
-          const studentProjects = listStudentProjects.filter((p: Project) => p.adaProjectID === project.id);
+          const studentProjects = filteredProjects.filter((p: Project) => p.adaProjectID === project.id);
           
           if (studentProjects.length === 0) return null;
 

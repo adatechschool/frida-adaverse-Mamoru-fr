@@ -13,7 +13,7 @@ export default function ProjectCard({project}: ProjectCardProps) {
 
   return (
     <div
-      className="group min-w-[280px] max-w-[450px] max-h-[450px] shrink-0 cursor-pointer sm:min-w-[400px] md:min-w-[450px]"
+      className="group w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] xl:w-[calc(25%-0.75rem)] max-w-[450px] cursor-pointer"
     >
       <div className="relative overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-900 transition-all duration-300 hover:shadow-xl">
         {/* Image */}

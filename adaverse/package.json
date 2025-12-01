@@ -10,7 +10,8 @@
     "seed": "tsx lib/db/seed.ts",
     "migrate": "npx drizzle-kit generate && npx drizzle-kit push",
     "approve": "tsx lib/db/approve-projects.ts",
-    "delete": "tsx lib/db/delete-student-project.ts"
+    "delete": "tsx lib/db/delete-student-project.ts",
+    "import-csv": "tsx lib/db/import-csv.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
