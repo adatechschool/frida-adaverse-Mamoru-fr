@@ -1,5 +1,5 @@
 import db from "./index";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { sql } from "drizzle-orm";
 import { Projects, StudentToProjects } from "./schema";
@@ -10,11 +10,35 @@ async function runSeed(filePath : string) {
     console.log(`✅ Seed ${filePath} executed successfully!`);
 }
 
+async function backupDataToJson() {
+    console.log('💾 Backing up data to JSON...');
+
+    // Récupérer les données des tables
+    const projectsBackup = await db.execute(sql`SELECT * FROM projects_students`);
+    const studentToProjectsBackup = await db.execute(sql`SELECT * FROM student_to_projects`);
+
+    // Créer un objet pour le backup
+    const backupData = {
+        projects_students: projectsBackup.rows,
+        student_to_projects: studentToProjectsBackup.rows,
+        timestamp: new Date().toISOString(),
+    };
+
+    // Générer un nom de fichier avec la date
+    const backupFileName = `backup_${new Date().toISOString().split('T')[0]}.json`;
+    const backupPath = join(__dirname, 'backups', backupFileName);
+
+    // Écrire le fichier JSON
+    writeFileSync(backupPath, JSON.stringify(backupData, null, 2));
+    console.log(`✅ Backup saved to ${backupFileName}`);
+}
+
 async function seed() {
     console.log('🗑️  Clearing existing data...');
     
     // Backup projects_students and student_to_projects data
     console.log('📦 Backing up project data...');
+    await backupDataToJson();
     const projectsBackup = await db.execute(sql`SELECT * FROM projects_students`);
     const studentToProjectsBackup = await db.execute(sql`SELECT * FROM student_to_projects`);
     
@@ -32,7 +56,9 @@ async function seed() {
     
     // Restore projects_students
     console.log('♻️  Restoring project data...');
-    for (const row of projectsBackup.rows) {
+    const backupData = JSON.parse(readFileSync(join(__dirname, 'backups', `backup_${new Date().toISOString().split('T')[0]}.json`), 'utf-8'));
+
+    for (const row of backupData.projects_students) {
         await db.insert(Projects).values({
             id: row.id as number,
             title: row.title as string,
@@ -47,7 +73,7 @@ async function seed() {
     }
     
     // Restore student_to_projects (only for students that still exist)
-    for (const row of studentToProjectsBackup.rows) {
+    for (const row of backupData.student_to_projects) {
         try {
             await db.insert(StudentToProjects).values({
                 id: row.id as number,
