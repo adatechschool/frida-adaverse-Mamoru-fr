@@ -36,7 +36,14 @@ export default function Home() {
       {/* Categories */}
       <div className="space-y-10 px-8 py-16 md:px-16">
         {listAdaProjects.map((project: adaProject) => {
-          const studentProjects = filteredProjects.filter((p: Project) => p.adaProjectID === project.id);
+          const studentProjects = filteredProjects
+            .filter((p: Project) => p.adaProjectID === project.id)
+            .sort((a, b) => {
+              // Sort by publishedAt in ascending order (earliest first)
+              if (!a.publishedAt) return 1; // Projects without publishedAt go to the end
+              if (!b.publishedAt) return -1;
+              return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+            });
           
           if (studentProjects.length === 0) return null;
 

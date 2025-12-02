@@ -5,7 +5,8 @@ import { useAdaProjects } from '@/context/AdaProjectsContext';
 import { useStudents } from '@/context/StudentsContext';
 import { CombinedColors } from '@/content/Colors';
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { X, CheckCheck } from 'lucide-react';
+import { PendingProjectCard } from '@/components/admin/PendingProjectCard';
 
 export default function ApproveProjectsPage() {
     const { pendingProjects, fetchPendingProjects } = useAddProject();
@@ -86,11 +87,103 @@ export default function ApproveProjectsPage() {
         }
     };
 
+    const handleRejectAll = async () => {
+        if (visibleProjects.length === 0) return;
+        
+        if (!confirm(`Êtes-vous sûr de vouloir rejeter tous les ${visibleProjects.length} projet(s) en attente ?`)) return;
+
+        setLoading(-1); // Use -1 to indicate "all" loading state
+        try {
+            const deletePromises = visibleProjects.map(project =>
+                fetch(`/api/pending-project?id=${project.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                    },
+                })
+            );
+
+            const results = await Promise.all(deletePromises);
+            const allSuccessful = results.every(res => res.ok);
+
+            if (allSuccessful) {
+                // Hide all projects
+                const allIds = new Set(visibleProjects.map(p => p.id));
+                setHiddenProjects(prev => new Set([...prev, ...allIds]));
+                alert('✅ Tous les projets ont été rejetés');
+            } else {
+                alert('⚠️ Certains projets n\'ont pas pu être rejetés');
+            }
+        } catch (error) {
+            console.error('[ApproveProjects] Error rejecting all:', error);
+            alert('❌ Erreur de connexion');
+        } finally {
+            setLoading(null);
+        }
+    };
+
+    const handleApproveAll = async () => {
+        if (visibleProjects.length === 0) return;
+        
+        if (!confirm(`Êtes-vous sûr de vouloir approuver tous les ${visibleProjects.length} projet(s) en attente ?`)) return;
+
+        setLoading(-1); // Use -1 to indicate "all" loading state
+        try {
+            const approvePromises = visibleProjects.map(project =>
+                fetch(`/api/pending-project/approve?id=${project.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+                    },
+                })
+            );
+
+            const results = await Promise.all(approvePromises);
+            const allSuccessful = results.every(res => res.ok);
+
+            if (allSuccessful) {
+                // Hide all projects
+                const allIds = new Set(visibleProjects.map(p => p.id));
+                setHiddenProjects(prev => new Set([...prev, ...allIds]));
+                alert('✅ Tous les projets ont été approuvés ! Exécutez "npm run approve" pour appliquer les changements.');
+            } else {
+                alert('⚠️ Certains projets n\'ont pas pu être approuvés');
+            }
+        } catch (error) {
+            console.error('[ApproveProjects] Error approving all:', error);
+            alert('❌ Erreur de connexion');
+        } finally {
+            setLoading(null);
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className={`text-3xl font-bold mb-8 ${CombinedColors.text.primary}`}>
-                Projets en attente d'approbation
-            </h1>
+            <div className="flex items-center justify-between mb-8">
+                <h1 className={`text-3xl font-bold ${CombinedColors.text.primary}`}>
+                    Projets en attente d'approbation
+                </h1>
+                {visibleProjects.length > 0 && (
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handleApproveAll}
+                            disabled={loading !== null}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-md ${CombinedColors.button.primary.bg} ${CombinedColors.button.primary.text} ${CombinedColors.button.primary.hover} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                            <CheckCheck className="h-5 w-5" />
+                            Approuver tout ({visibleProjects.length})
+                        </button>
+                        <button
+                            onClick={handleRejectAll}
+                            disabled={loading !== null}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-md ${CombinedColors.button.exit.bg} ${CombinedColors.button.exit.text} ${CombinedColors.button.exit.hover} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                            <X className="h-5 w-5" />
+                            Rejeter tout ({visibleProjects.length})
+                        </button>
+                    </div>
+                )}
+            </div>
 
             {visibleProjects.length === 0 ? (
                 <div className={`p-8 text-center ${CombinedColors.background.card} rounded-lg`}>
@@ -101,47 +194,15 @@ export default function ApproveProjectsPage() {
             ) : (
                 <div className="space-y-6">
                     {visibleProjects.map((project) => (
-                        <div
+                        <PendingProjectCard
                             key={project.id}
-                            className={`p-6 rounded-lg border ${CombinedColors.background.card} ${CombinedColors.border.default}`}
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                    <h2 className={`text-2xl font-bold mb-2 ${CombinedColors.text.primary}`}>
-                                        {project.title}
-                                    </h2>
-                                    <div className={`space-y-2 ${CombinedColors.text.secondary}`}>
-                                        <p><strong>URL Name:</strong> {project.URLName}</p>
-                                        <p><strong>Ada Project:</strong> {getProjectName(project.adaProjectID)}</p>
-                                        <p><strong>GitHub:</strong> <a href={project.githubRepoURL} target="_blank" rel="noopener noreferrer" className="underline">{project.githubRepoURL}</a></p>
-                                        {project.demoURL && (
-                                            <p><strong>Demo:</strong> <a href={project.demoURL} target="_blank" rel="noopener noreferrer" className="underline">{project.demoURL}</a></p>
-                                        )}
-                                        <p><strong>Students:</strong> {getStudentNames(project.studentIds)}</p>
-                                        <p><strong>Submitted:</strong> {new Date(project.createdAt).toLocaleString()}</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 ml-6">
-                                    <button
-                                        onClick={() => handleApprove(project.id)}
-                                        disabled={loading === project.id}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-md ${CombinedColors.button.primary.bg} ${CombinedColors.button.primary.text} ${CombinedColors.button.primary.hover} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    >
-                                        <Check className="h-5 w-5" />
-                                        Approuver
-                                    </button>
-                                    <button
-                                        onClick={() => handleReject(project.id)}
-                                        disabled={loading === project.id}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-md ${CombinedColors.button.exit.bg} ${CombinedColors.button.exit.text} ${CombinedColors.button.exit.hover} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    >
-                                        <X className="h-5 w-5" />
-                                        Rejeter
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                            project={project}
+                            getProjectName={getProjectName}
+                            getStudentNames={getStudentNames}
+                            onApprove={handleApprove}
+                            onReject={handleReject}
+                            loading={loading}
+                        />
                     ))}
                 </div>
             )}

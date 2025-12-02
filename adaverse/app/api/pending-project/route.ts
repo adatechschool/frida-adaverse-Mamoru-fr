@@ -50,13 +50,26 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Check if a project with this GitHub URL already exists
+        const existingProjects = await db.select().from(Projects);
+        const existingPending = await db.select().from(PendingProjects);
+        
+        const projectWithSameGitHub = existingProjects.find(p => p.githubRepoURL === githubRepoURL);
+        const pendingWithSameGitHub = existingPending.find(p => p.githubRepoURL === githubRepoURL);
+        
+        if (projectWithSameGitHub || pendingWithSameGitHub) {
+            console.log(`[Pending Projects - POST] Project with GitHub URL "${githubRepoURL}" already exists`);
+            return NextResponse.json(
+                { error: 'A project with this GitHub repository URL already exists' },
+                { status: 409 }
+            );
+        }
+
         // Generate base URL name from title
         let URLName = generateURLName(title);
         console.log(`[Pending Projects - POST] Generated URLName from title "${title}": "${URLName}"`);
 
         // Check if URLName already exists in both tables and make it unique
-        const existingProjects = await db.select().from(Projects);
-        const existingPending = await db.select().from(PendingProjects);
         const allURLNames = [
             ...existingProjects.map(p => p.URLName),
             ...existingPending.map(p => p.URLName)
