@@ -125,7 +125,17 @@ async function importCSV(csvPath: string) {
         for (const row of rows) {
             console.log(`\n🔄 Processing: "${row.title}"`);
             
-            // 1. Find Ada Project ID with better matching
+            // 1. Check if a project with this GitHub URL already exists
+            const projectWithSameGitHub = existingProjects.find(p => p.githubRepoURL === row.githubUrl);
+            const pendingWithSameGitHub = existingPending.find(p => p.githubRepoURL === row.githubUrl);
+            
+            if (projectWithSameGitHub || pendingWithSameGitHub) {
+                console.log(`   ⚠️  Project with GitHub URL "${row.githubUrl}" already exists, skipping`);
+                skipCount++;
+                continue;
+            }
+            
+            // 2. Find Ada Project ID with better matching
             let adaProjectID: number | null = null;
             if (row.category) {
                 const normalizedCategory = normalizeText(row.category);
@@ -177,7 +187,7 @@ async function importCSV(csvPath: string) {
                 }
             }
             
-            // 2. Find student IDs from participants using normalized text
+            // 3. Find student IDs from participants using normalized text
             const participantNames = row.participants.split(',').map(n => n.trim());
             const studentIds: number[] = [];
             
@@ -202,7 +212,7 @@ async function importCSV(csvPath: string) {
                 continue;
             }
             
-            // 3. Generate unique URLName
+            // 4. Generate unique URLName
             let URLName = generateURLName(row.title);
             if (allURLNames.includes(URLName)) {
                 let counter = 1;
@@ -217,7 +227,7 @@ async function importCSV(csvPath: string) {
                 console.log(`   ✅ URLName: ${URLName}`);
             }
             
-            // 4. Build image URL and test if it exists
+            // 5. Build image URL and test if it exists
             let imageUrl = '';
             const thumbnailUrl = `${row.githubUrl}/blob/main/thumbnail.png?raw=true`;
             
@@ -233,7 +243,7 @@ async function importCSV(csvPath: string) {
                 console.log(`   ⚠️  Could not verify thumbnail URL`);
             }
             
-            // 5. Insert into pending_projects
+            // 6. Insert into pending_projects
             try {
                 await db.insert(PendingProjects).values({
                     title: row.title,

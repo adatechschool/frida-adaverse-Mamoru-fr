@@ -78,12 +78,12 @@ Pour mener à bien ce projet, il est nécessaire de maîtriser :
 -   [x] Je sais faire un CRUD de ma donnée avec mon ORM
 -   [x] Je sais créer des routes api et des composants serveur dans NextJS
 -   [x] Je sais créer et exécuter des migrations
--   [ ] Je sais créer et manipuler des forms actions
+-   [x] Je sais créer et manipuler des forms actions
 
 ### Front
 
 -   [x] Je peux créer une page dans NextJS
--   [ ] Je comprends l'utilité du `"use client"`
+-   [x] Je comprends l'utilité du `"use client"`
 -   [x] Je comprends comment et quand utiliser useState et useEffect
 -   [x] Je sais fetch des routes API depuis une page NextJS
 -   [x] Je sais découper le code de mon projet en plusieurs fichiers
@@ -93,7 +93,7 @@ Pour mener à bien ce projet, il est nécessaire de maîtriser :
 -   [x] Je sais comment utiliser `Link` pour naviguer entre les pages côté client
 -   [x] Je sais faire la différence entre une route statique et dynamique
 -   [x] Je sais appliquer du style à mes composants avec tailwind
--   [ ] Je sais créer un dialogue
+-   [x] Je sais créer un dialogue
 
 ## 🧩 Fonctionnalités à développer
 
@@ -137,20 +137,20 @@ Une **seed** permet d’ajouter des données de base dans la base de données.
 
 -   [x] Créer un script `.sql` pour insérer les **promotions Ada**
 -   [x] Créer un script `.sql` pour insérer les **projets Ada**
--   [ ] Créer un script `.sql` permettant de **publier un projet** (en mettant à jour sa date de publication selon son identifiant)
+-   [x] Créer un script `.sql` permettant de **publier un projet** (en mettant à jour sa date de publication selon son identifiant)
 
 ### 3. 💻 Intégration sur le site
 
 #### a. Formulaire de proposition de projet
 
--   [ ] Ajouter sur la page d’accueil `/` un **bouton "Proposer un projet"** dans le header.
--   [ ] Le **bouton "Proposer un projet"** ouvre une **popup** contenant un **formulaire** permettant de :
+-   [x] Ajouter sur la page d’accueil `/` un **bouton "Proposer un projet"** dans le header.
+-   [x] Le **bouton "Proposer un projet"** ouvre une **popup** contenant un **formulaire** permettant de :
     -   saisir le titre du projet,
     -   renseigner les liens GitHub et de démo,
     -   choisir la promotion concernée,
     -   choisir le projet Ada associé (via des menus déroulants).
--   [ ] Attention, si le titre ou les liens de sont pas renseignés, le projet ne doit pas être créé et on doit afficher une erreur
--   [ ] Lorsqu’un·e utilisateur·rice valide le formulaire :
+-   [x] Attention, si le titre ou les liens de sont pas renseignés, le projet ne doit pas être créé et on doit afficher une erreur
+-   [x] Lorsqu’un·e utilisateur·rice valide le formulaire :
     -   le projet est enregistré dans la base de données avec toutes les informations saisies,
     -   la **date de publication reste vide** tant qu’il n’a pas été validé.
 
@@ -158,10 +158,10 @@ Une **seed** permet d’ajouter des données de base dans la base de données.
 
 #### b. Page d’accueil `/` : affichage des projets publiés
 
--   [ ] Afficher sur la page d’accueil la **liste des projets publiés**, regroupés par projet Ada.
--   [ ] Les projets doivent être récupérés depuis le backend et **triés par date de publication décroissante (le plus récent en premier)**.
--   [ ] **Les projets non publiés (date vide)** ne doivent pas apparaître.
--   [ ] Chaque carte de projet doit afficher :
+-   [x] Afficher sur la page d’accueil la **liste des projets publiés**, regroupés par projet Ada.
+-   [x] Les projets doivent être récupérés depuis le backend et **triés par date de publication décroissante (le plus récent en premier)**.
+-   [x] **Les projets non publiés (date vide)** ne doivent pas apparaître.
+-   [x] Chaque carte de projet doit afficher :
     -   le titre du projet,
     -   la date de publication,
     -   la promotion correspondante,
@@ -173,15 +173,15 @@ Une **seed** permet d’ajouter des données de base dans la base de données.
 
 #### c. Page de détail d’un projet
 
--   [ ] Cliquer sur un projet redirige vers une **page de détail**.
--   [ ] Cette page doit afficher :
+-   [x] Cliquer sur un projet redirige vers une **page de détail**.
+-   [x] Cette page doit afficher :
     -   le titre du projet,
     -   la promotion,
     -   l’image du projet,
     -   la date de publication,
     -   le projet Ada associé.
--   [ ] Elle doit également contenir un lien pour afficher la démo et un autre pour accéder au Github du projet
--   [ ] Si on clique sur le logo, on doit revenir à la page d’accueil.
+-   [x] Elle doit également contenir un lien pour afficher la démo et un autre pour accéder au Github du projet
+-   [x] Si on clique sur le logo, on doit revenir à la page d’accueil.
 
 ![](./images/project-details.png)
 

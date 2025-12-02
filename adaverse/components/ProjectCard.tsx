@@ -4,18 +4,39 @@ import {Project} from "@/content/project";
 import {externalURLformat} from "@/utils/externalURLformat";
 import {FormatDate} from "@/utils/formatDate";
 import {Image} from 'lucide-react'
+import {useAdaPromotions} from "@/context/AdaPromotionsContext";
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export default function ProjectCard({project}: ProjectCardProps) {
+  const {listAdaPromotions} = useAdaPromotions();
+
+  // Get unique promotions from students
+  const uniquePromotions = project.students 
+    ? [...new Set(project.students.map(student => student.promotionId))]
+    : [];
+
+  // Determine promotion display text
+  let promotionText = '';
+  if (uniquePromotions.length === 1) {
+    const promotion = listAdaPromotions.find(p => p.id === uniquePromotions[0]);
+    promotionText = promotion?.promotionName || '';
+  } else if (uniquePromotions.length > 1) {
+    promotionText = 'Inter-promotions';
+  }
 
   return (
-    <div
-      className="group w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] xl:w-[calc(25%-0.75rem)] max-w-[450px] cursor-pointer"
-    >
-      <div className="relative overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-900 transition-all duration-300 hover:shadow-xl">
+    <div className="group h-full cursor-pointer">
+      <div className="relative overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-900 transition-all duration-300 hover:shadow-xl h-full flex flex-col">
+        {/* Promotion Badge */}
+        {promotionText && (
+          <div className="absolute top-3 right-3 z-10 bg-purple-600 dark:bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+            {promotionText}
+          </div>
+        )}
+        
         {/* Image */}
         {project.image ? (
           <div className="relative w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800" style={{paddingBottom: '56.25%'}}>
@@ -36,10 +57,10 @@ export default function ProjectCard({project}: ProjectCardProps) {
         )}
 
         {/* Content */}
-        <div className="p-5">
+        <div className="p-5 flex-1 flex flex-col">
           <div className="mb-3">
             <h3 className="text-xl font-semibold leading-tight">{project.title}</h3>
-            {project.publishedAt && <p>Le {FormatDate(project.publishedAt)}</p>}
+            {project.publishedAt && <p className="text-sm">Le {FormatDate(project.publishedAt)}</p>}
           </div>
 
           {/* Students */}
@@ -62,7 +83,7 @@ export default function ProjectCard({project}: ProjectCardProps) {
           )}
 
           {/* Buttons */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-auto">
             <a
               href={`/${project.URLName}`}
               className="flex flex-1 items-center justify-center gap-2 rounded-md bg-neutral-900 dark:bg-white px-4 py-2.5 text-sm font-semibold text-white dark:text-black no-underline transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-200"

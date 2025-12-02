@@ -22,11 +22,14 @@ export function useProjectFilters(projects: Project[]) {
       );
     }
 
-    // Filter by promotion (first student's promotion)
+    // Filter by promotion (check if any student in the project has this promotion)
     if (selectedPromotion !== null) {
       filtered = filtered.filter(project => {
         if (!project.students || project.students.length === 0) return false;
-        return project.students[0].promotionId === selectedPromotion;
+        // Get list of unique promotions in this project
+        const projectPromotions = [...new Set(project.students.map(student => student.promotionId))];
+        // Check if the selected promotion is in the project's promotions
+        return projectPromotions.includes(selectedPromotion);
       });
     }
 

@@ -3,11 +3,14 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useStudentProjects } from '@/context/StudentProjectsContext';
 import { useAdaProjects } from '@/context/AdaProjectsContext';
+import { useAdaPromotions } from '@/context/AdaPromotionsContext';
+import { useGitHubRepo } from '@/hooks/useGitHubRepo';
+import { useGitHubReadme } from '@/hooks/useGitHubReadme';
 import { Loading } from '@/components/interactComponents/Loading';
 import { ErrorMessage } from '@/components/interactComponents/ErrorMessage';
 import { externalURLformat } from '@/utils/externalURLformat';
 import { FormatDate } from '@/utils/formatDate';
-import { Image, ArrowLeft, Github, ExternalLink, Calendar, Users } from 'lucide-react';
+import { Image, ArrowLeft, Github, ExternalLink, Calendar, Users, Award, GitBranch, Star, GitFork, AlertCircle, Code2, Tag } from 'lucide-react';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -16,6 +19,14 @@ export default function ProjectDetailPage() {
 
   const { listStudentProjects, loading: projectsLoading, error: projectsError } = useStudentProjects();
   const { listAdaProjects, loading: adaProjectsLoading, error: adaProjectsError } = useAdaProjects();
+  const { listAdaPromotions } = useAdaPromotions();
+
+  // Find the project by URLName first (before any returns)
+  const project = listStudentProjects.find(p => p.URLName === url);
+
+  // Fetch GitHub repository data (must be called before any conditional returns)
+  const { repoData, languages, issueStats, pullRequestStats, loading: githubLoading, error: githubError } = useGitHubRepo(project?.githubRepoURL || '');
+  const { readme, loading: readmeLoading, error: readmeError } = useGitHubReadme(project?.githubRepoURL || '');
 
   // Show loading state
   if (projectsLoading || adaProjectsLoading) {
@@ -26,9 +37,6 @@ export default function ProjectDetailPage() {
   if (projectsError || adaProjectsError) {
     return <ErrorMessage message={projectsError || adaProjectsError} />;
   }
-
-  // Find the project by URLName
-  const project = listStudentProjects.find(p => p.URLName === url);
 
   if (!project) {
     return (
@@ -50,6 +58,23 @@ export default function ProjectDetailPage() {
 
   // Find the Ada Project name
   const adaProject = listAdaProjects.find(ap => ap.id === project.adaProjectID);
+
+  // Get unique promotions from students
+  const uniquePromotions = project.students 
+    ? [...new Set(project.students.map(student => student.promotionId))]
+    : [];
+  
+  const promotionNames = uniquePromotions
+    .map(id => listAdaPromotions.find(p => p.id === id)?.promotionName)
+    .filter(Boolean);
+
+  // Get top languages
+  const topLanguages = languages 
+    ? Object.entries(languages)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([lang]) => lang)
+    : [];
 
   return (
     <div className="min-h-screen px-8 py-8 md:px-16 md:py-12">
@@ -94,6 +119,16 @@ export default function ProjectDetailPage() {
 
         {/* Info Grid */}
         <div className="mb-8 grid gap-6 md:grid-cols-2">
+
+          {/* Created Date */}
+          <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+            <div className="mb-2 flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+              <GitBranch className="h-5 w-5" />
+              <h3 className="font-semibold">Date de création</h3>
+            </div>
+            <p className="text-lg">{FormatDate(project.createdAt)}</p>
+          </div>
+
           {/* Published Date */}
           {project.publishedAt && (
             <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
@@ -102,6 +137,28 @@ export default function ProjectDetailPage() {
                 <h3 className="font-semibold">Date de publication</h3>
               </div>
               <p className="text-lg">{FormatDate(project.publishedAt)}</p>
+            </div>
+          )}
+
+          {/* Promotion(s) */}
+          {promotionNames.length > 0 && (
+            <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+              <div className="mb-2 flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                <Award className="h-5 w-5" />
+                <h3 className="font-semibold">
+                  {promotionNames.length > 1 ? 'Promotions' : 'Promotion'}
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {promotionNames.map((name, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-block rounded-full bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-700 dark:text-purple-300"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
@@ -125,6 +182,116 @@ export default function ProjectDetailPage() {
             </div>
           )}
         </div>
+
+        {/* GitHub Repository Stats */}
+        {repoData && (
+          <div className="mb-8">
+            <h2 className="mb-4 text-2xl font-semibold">Statistiques du dépôt</h2>
+            <div className="flex flex-wrap gap-4">
+              <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
+                  <Star className="h-4 w-4" />
+                  <span className="text-sm font-medium">Stars</span>
+                </div>
+                <p className="text-2xl font-bold">{repoData.stargazers_count}</p>
+              </div>
+              <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
+                  <GitFork className="h-4 w-4" />
+                  <span className="text-sm font-medium">Forks</span>
+                </div>
+                <p className="text-2xl font-bold">{repoData.forks_count}</p>
+              </div>
+              
+              {/* Issues Stats */}
+              {issueStats && (
+                <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <span className="text-sm font-medium">Issues</span>
+                  </div>
+                  <p className="text-2xl font-bold">{issueStats.total_count}</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    {issueStats.open_count} ouvertes · {issueStats.closed_count} fermées
+                  </p>
+                </div>
+              )}
+
+              {/* Pull Requests */}
+              {pullRequestStats && (
+                <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
+                    <GitBranch className="h-4 w-4" />
+                    <span className="text-sm font-medium">Pull Requests</span>
+                  </div>
+                  <p className="text-2xl font-bold">{pullRequestStats.total_count}</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    {pullRequestStats.open_count} ouvertes · {pullRequestStats.closed_count} fermées
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Languages */}
+            {topLanguages.length > 0 && (
+              <div className="mt-4 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-3">
+                  <Code2 className="h-4 w-4" />
+                  <span className="text-sm font-medium">Langages principaux</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {topLanguages.map((lang) => (
+                    <span
+                      key={lang}
+                      className="inline-block rounded-md bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300"
+                    >
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Repository Description */}
+        {repoData?.description && (
+          <div className="mb-8 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+            <h2 className="mb-3 text-xl font-semibold">Description</h2>
+            <p className="text-neutral-700 dark:text-neutral-300">{repoData.description}</p>
+          </div>
+        )}
+
+        {/* README Content */}
+        {readme && (
+          <div className="mb-8 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+            <h2 className="mb-4 text-2xl font-semibold">Documentation du projet</h2>
+            <div 
+              className="markdown-content"
+              dangerouslySetInnerHTML={{ __html: readme }}
+            />
+          </div>
+        )}
+
+        {/* Topics */}
+        {repoData?.topics && repoData.topics.length > 0 && (
+          <div className="mb-8 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+            <div className="mb-3 flex items-center gap-2">
+              <Tag className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+              <h2 className="text-xl font-semibold">Topics</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {repoData.topics.map((topic) => (
+                <span
+                  key={topic}
+                  className="inline-block rounded-md bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300"
+                >
+                  {topic}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-4 sm:flex-row">
