@@ -24,11 +24,19 @@ body {
   height: 0;
 }
 
-/* Markdown/README styling */
+/* Markdown/README styling - GitHub-like */
 .markdown-content {
-  line-height: 1.75;
+  line-height: 1.6;
+  color: rgb(31 35 40);
+  font-size: 16px;
+  word-wrap: break-word;
 }
 
+.dark .markdown-content {
+  color: rgb(230 237 243);
+}
+
+/* Headings */
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
@@ -36,109 +44,290 @@ body {
 .markdown-content h5,
 .markdown-content h6 {
   font-weight: 600;
-  margin-top: 1.5em;
-  margin-bottom: 0.75em;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
 }
 
-.markdown-content h1 { font-size: 1.875rem; }
-.markdown-content h2 { font-size: 1.5rem; }
-.markdown-content h3 { font-size: 1.25rem; }
-.markdown-content h4 { font-size: 1.125rem; }
+/* Hide GitHub anchor links in headings */
+.markdown-content h1 a.anchor,
+.markdown-content h2 a.anchor,
+.markdown-content h3 a.anchor,
+.markdown-content h4 a.anchor,
+.markdown-content h5 a.anchor,
+.markdown-content h6 a.anchor {
+  display: none;
+}
 
+.markdown-content h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgb(216 222 228);
+}
+
+.dark .markdown-content h1 {
+  border-bottom-color: rgb(48 54 61);
+}
+
+.markdown-content h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgb(216 222 228);
+}
+
+.dark .markdown-content h2 {
+  border-bottom-color: rgb(48 54 61);
+}
+
+.markdown-content h3 { font-size: 1.25em; }
+.markdown-content h4 { font-size: 1em; }
+.markdown-content h5 { font-size: 0.875em; }
+.markdown-content h6 {
+  font-size: 0.85em;
+  color: rgb(87 96 106);
+}
+
+.dark .markdown-content h6 {
+  color: rgb(139 148 158);
+}
+
+/* Paragraphs and spacing */
 .markdown-content p {
-  margin-bottom: 1em;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 
+.markdown-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Links */
 .markdown-content a {
-  color: rgb(147 51 234);
+  color: rgb(9 105 218);
   text-decoration: none;
+}
+
+.dark .markdown-content a {
+  color: rgb(88 166 255);
 }
 
 .markdown-content a:hover {
   text-decoration: underline;
 }
 
+/* Inline code */
 .markdown-content code {
-  color: rgb(147 51 234);
-  background-color: rgb(245 245 245);
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-size: 0.875em;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgb(175 184 193 / 0.2);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
 
 .dark .markdown-content code {
-  color: rgb(192 132 252);
-  background-color: rgb(38 38 38);
+  background-color: rgb(110 118 129 / 0.4);
 }
 
+/* Code blocks */
 .markdown-content pre {
-  background-color: rgb(245 245 245);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin-bottom: 1em;
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: rgb(246 248 250);
+  border-radius: 6px;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 
 .dark .markdown-content pre {
-  background-color: rgb(38 38 38);
+  background-color: rgb(22 27 34);
 }
 
 .markdown-content pre code {
-  background-color: transparent;
+  display: inline;
   padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
 }
 
+/* Lists */
 .markdown-content ul,
 .markdown-content ol {
-  margin-bottom: 1em;
-  padding-left: 1.5em;
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+.markdown-content ul ul,
+.markdown-content ul ol,
+.markdown-content ol ol,
+.markdown-content ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .markdown-content li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 
-.markdown-content img {
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  margin: 1em 0;
+.markdown-content li > p {
+  margin-top: 16px;
 }
 
+.markdown-content li + li {
+  margin-top: 0.25em;
+}
+
+/* Blockquotes */
 .markdown-content blockquote {
-  border-left: 4px solid rgb(147 51 234);
-  padding-left: 1em;
-  margin: 1em 0;
-  font-style: italic;
-  color: rgb(115 115 115);
+  margin: 0 0 16px 0;
+  padding: 0 1em;
+  color: rgb(87 96 106);
+  border-left: 0.25em solid rgb(216 222 228);
 }
 
 .dark .markdown-content blockquote {
-  border-left-color: rgb(192 132 252);
-  color: rgb(163 163 163);
+  color: rgb(139 148 158);
+  border-left-color: rgb(48 54 61);
 }
 
+/* Tables */
 .markdown-content table {
-  width: 100%;
+  border-spacing: 0;
   border-collapse: collapse;
-  margin-bottom: 1em;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 
-.markdown-content th,
-.markdown-content td {
-  border: 1px solid rgb(229 229 229);
-  padding: 0.5em;
+.markdown-content table th,
+.markdown-content table td {
+  padding: 6px 13px;
+  border: 1px solid rgb(216 222 228);
 }
 
-.dark .markdown-content th,
-.dark .markdown-content td {
-  border-color: rgb(64 64 64);
+.dark .markdown-content table th,
+.dark .markdown-content table td {
+  border-color: rgb(48 54 61);
 }
 
-.markdown-content th {
-  background-color: rgb(250 250 250);
+.markdown-content table th {
+  font-weight: 600;
+  background-color: rgb(246 248 250);
+}
+
+.dark .markdown-content table th {
+  background-color: rgb(22 27 34);
+}
+
+.markdown-content table tr {
+  background-color: rgb(255 255 255);
+  border-top: 1px solid rgb(208 215 222);
+}
+
+.dark .markdown-content table tr {
+  background-color: rgb(13 17 23);
+  border-top-color: rgb(33 38 45);
+}
+
+.markdown-content table tr:nth-child(2n) {
+  background-color: rgb(246 248 250);
+}
+
+.dark .markdown-content table tr:nth-child(2n) {
+  background-color: rgb(22 27 34);
+}
+
+/* Images */
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  box-sizing: content-box;
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+.dark .markdown-content img {
+  background-color: transparent;
+}
+
+/* Preserve image alignment and styling from GitHub */
+.markdown-content p img,
+.markdown-content a img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Center-aligned images */
+.markdown-content p:has(> img:only-child) {
+  text-align: center;
+}
+
+/* Image with width/height attributes should maintain aspect ratio */
+.markdown-content img[width],
+.markdown-content img[height] {
+  height: auto;
+}
+
+/* Support HTML align attribute */
+.markdown-content img[align="left"] {
+  float: left;
+  margin-right: 1rem;
+}
+
+.markdown-content img[align="right"] {
+  float: right;
+  margin-left: 1rem;
+}
+
+.markdown-content img[align="center"] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Support for HTML tables in README */
+.markdown-content table[align="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Horizontal rule */
+.markdown-content hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: rgb(216 222 228);
+  border: 0;
+}
+
+.dark .markdown-content hr {
+  background-color: rgb(48 54 61);
+}
+
+/* Strong and emphasis */
+.markdown-content strong {
   font-weight: 600;
 }
 
-.dark .markdown-content th {
-  background-color: rgb(23 23 23);
+.markdown-content em {
+  font-style: italic;
+}
+
+/* Task lists */
+.markdown-content input[type="checkbox"] {
+  margin-right: 0.5em;
 }
