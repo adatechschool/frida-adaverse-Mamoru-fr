@@ -50,6 +50,15 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Validate GitHub URL format
+        const githubUrlPattern = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+$/;
+        if (!githubUrlPattern.test(githubRepoURL)) {
+            return NextResponse.json(
+                { error: 'Invalid GitHub repository URL format' },
+                { status: 400 }
+            );
+        }
+
         // Check if a project with this GitHub URL already exists
         const existingProjects = await db.select().from(Projects);
         const existingPending = await db.select().from(PendingProjects);

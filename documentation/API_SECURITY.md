@@ -1,5 +1,36 @@
 # API Security Documentation
 
+<details>
+
+<summary>Table of contents</summary>
+
+- [API Security Documentation](#api-security-documentation)
+  - [🔐 Overview](#-overview)
+  - [🔑 API Keys](#-api-keys)
+    - [1. **API\_SECRET\_KEY** (Server-side only)](#1-api_secret_key-server-side-only)
+    - [2. **NEXT\_PUBLIC\_API\_KEY** (Client-side)](#2-next_public_api_key-client-side)
+  - [📡 How It Works](#-how-it-works)
+    - [**Protected API Routes**](#protected-api-routes)
+    - [**Request Flow**](#request-flow)
+    - [**Example Request**](#example-request)
+  - [✅ Already Implemented](#-already-implemented)
+  - [🧪 Testing](#-testing)
+    - [**Test 1: Valid API Key (Should Work)**](#test-1-valid-api-key-should-work)
+    - [**Test 2: No API Key (Should Fail)**](#test-2-no-api-key-should-fail)
+    - [**Test 3: Invalid API Key (Should Fail)**](#test-3-invalid-api-key-should-fail)
+  - [🚀 Using the API Externally](#-using-the-api-externally)
+    - [**JavaScript/Fetch**](#javascriptfetch)
+    - [**Python**](#python)
+    - [**cURL**](#curl)
+  - [🔒 Security Levels](#-security-levels)
+    - [**Current Setup: Medium Security**](#current-setup-medium-security)
+    - [**For Production: High Security**](#for-production-high-security)
+  - [🛡️ What's Protected](#️-whats-protected)
+  - [⚠️ Important Notes](#️-important-notes)
+  - [🔄 Rotating API Keys](#-rotating-api-keys)
+
+</details>
+
 ## 🔐 Overview
 
 Your Adaverse API is now protected with **API Key Authentication**. All API requests must include a valid API key in the request headers, or they will be rejected with a `401 Unauthorized` or `403 Forbidden` error.

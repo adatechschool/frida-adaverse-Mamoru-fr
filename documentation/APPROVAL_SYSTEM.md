@@ -1,5 +1,54 @@
 # 📚 Système d'Approbation de Projets - Guide Pédagogique
 
+<details>
+
+<summary>Table of contents</summary>
+
+- [📚 Système d'Approbation de Projets - Guide Pédagogique](#-système-dapprobation-de-projets---guide-pédagogique)
+  - [🎯 Vue d'ensemble](#-vue-densemble)
+  - [🏗️ Architecture du Système](#️-architecture-du-système)
+    - [Tables de Base de Données](#tables-de-base-de-données)
+  - [📝 Étape 1 : Soumission d'un Projet (Utilisateur)](#-étape-1--soumission-dun-projet-utilisateur)
+    - [Où ?](#où-)
+    - [Que se passe-t-il ?](#que-se-passe-t-il-)
+    - [Code technique](#code-technique)
+  - [🔍 Étape 2 : Révision des Projets (Admin)](#-étape-2--révision-des-projets-admin)
+    - [Que voit l'admin ?](#que-voit-ladmin-)
+    - [Comment ça fonctionne ?](#comment-ça-fonctionne-)
+  - [✅ Étape 3A : Approuver un Projet](#-étape-3a--approuver-un-projet)
+    - [Que se passe-t-il quand on clique "Approuver" ?](#que-se-passe-t-il-quand-on-clique-approuver-)
+    - [Code technique](#code-technique-1)
+  - [❌ Étape 3B : Rejeter un Projet](#-étape-3b--rejeter-un-projet)
+    - [Que se passe-t-il quand on clique "Rejeter" ?](#que-se-passe-t-il-quand-on-clique-rejeter-)
+  - [🚀 Étape 4 : Exécution des Projets Approuvés](#-étape-4--exécution-des-projets-approuvés)
+    - [Commande](#commande)
+    - [Que fait cette commande ?](#que-fait-cette-commande-)
+    - [Console output](#console-output)
+  - [🔄 Flux Complet (Diagramme)](#-flux-complet-diagramme)
+  - [🛡️ Pourquoi Ce Système ?](#️-pourquoi-ce-système-)
+    - [Sécurité](#sécurité)
+    - [Contrôle Qualité](#contrôle-qualité)
+    - [Flexibilité](#flexibilité)
+  - [📂 Structure des Fichiers](#-structure-des-fichiers)
+  - [🔧 Configuration Requise](#-configuration-requise)
+    - [Variables d'environnement (.env)](#variables-denvironnement-env)
+    - [Installer les dépendances](#installer-les-dépendances)
+    - [Créer la table pending\_projects](#créer-la-table-pending_projects)
+  - [📖 Scénario d'Utilisation Complet](#-scénario-dutilisation-complet)
+    - [Lundi matin](#lundi-matin)
+    - [Mardi après-midi](#mardi-après-midi)
+    - [Mercredi matin](#mercredi-matin)
+  - [🐛 Débogage](#-débogage)
+    - [Le projet n'apparaît pas après approbation](#le-projet-napparaît-pas-après-approbation)
+    - [Erreur lors de `npm run approve`](#erreur-lors-de-npm-run-approve)
+    - [Les Student IDs sont incorrects](#les-student-ids-sont-incorrects)
+  - [🎓 Concepts Clés à Retenir](#-concepts-clés-à-retenir)
+  - [🚀 Pour Aller Plus Loin](#-pour-aller-plus-loin)
+    - [Améliorations possibles](#améliorations-possibles)
+    - [Questions fréquentes](#questions-fréquentes)
+
+</details>
+
 ## 🎯 Vue d'ensemble
 
 Ce système permet aux étudiants de soumettre leurs projets via un formulaire web, puis à un administrateur de les approuver avant qu'ils n'apparaissent sur le site. C'est un **système de validation en deux étapes** qui garantit le contrôle qualité.
