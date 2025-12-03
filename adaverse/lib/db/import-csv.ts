@@ -139,43 +139,47 @@ async function importCSV(csvPath: string) {
             if (row.category) {
                 const normalizedCategory = normalizeText(row.category);
                 
+                // Common category variations mapping (check before normalization)
+                const categoryMap: { [key: string]: string } = {
+                    'checkevents': 'adacheck',
+                    'checkevent': 'adacheck',
+                    'adacheckevent': 'adacheck',
+                    'quizz': 'adaquiz',
+                    'quiz': 'adaquiz',
+                    'adaopte/adaence': 'adaopte - adaence',
+                    'adaopte adaence': 'adaopte - adaence',
+                    'projets libres': 'projet libre',
+                    'projet libres': 'projet libre',
+                    'projets libre': 'projet libre',
+                    'dataviz': 'adatech dataviz',
+                    'data viz': 'adatech dataviz',
+                };
+                
+                // Check if there's a mapping for the normalized category
+                const mappedCategory = categoryMap[normalizedCategory];
+                const searchCategory = mappedCategory || normalizedCategory;
+                
                 // Try exact match first
                 let matchingProject = allAdaProjects.find(p => 
-                    normalizeText(p.projectName) === normalizedCategory
+                    normalizeText(p.projectName) === searchCategory
                 );
                 
-                // If no exact match, try fuzzy matching
-                if (!matchingProject) {
-                    // Common category variations mapping
-                    const categoryMap: { [key: string]: string } = {
-                        'checkevents': 'adacheck',
-                        'checkevent': 'adacheck',
-                        'adacheckevent': 'adacheck',
-                        'quizz': 'adaquiz',
-                        'quiz': 'adaquiz',
-                        'projets libres': 'projet libre',
-                        'projet libres': 'projet libre',
-                        'projets libre': 'projet libre',
-                        'dataviz': 'adatech dataviz',
-                        'data viz': 'adatech dataviz',
-                    };
-                    
-                    const mappedCategory = categoryMap[normalizedCategory];
-                    if (mappedCategory) {
-                        matchingProject = allAdaProjects.find(p => 
-                            normalizeText(p.projectName).includes(mappedCategory) ||
-                            mappedCategory.includes(normalizeText(p.projectName))
-                        );
-                    }
-                    
-                    // Last resort: partial match
-                    if (!matchingProject) {
-                        matchingProject = allAdaProjects.find(p => 
-                            normalizeText(p.projectName).includes(normalizedCategory) ||
-                            normalizedCategory.includes(normalizeText(p.projectName))
-                        );
-                    }
+                // If no exact match, try fuzzy matching with mapped category
+                if (!matchingProject && mappedCategory) {
+                    matchingProject = allAdaProjects.find(p => 
+                        normalizeText(p.projectName).includes(mappedCategory) ||
+                        mappedCategory.includes(normalizeText(p.projectName))
+                    );
                 }
+                
+                // Last resort: partial match with original normalized category
+                if (!matchingProject) {
+                    matchingProject = allAdaProjects.find(p => 
+                        normalizeText(p.projectName).includes(normalizedCategory) ||
+                        normalizedCategory.includes(normalizeText(p.projectName))
+                    );
+                }
+                
                 
                 if (matchingProject) {
                     adaProjectID = matchingProject.id;
