@@ -4,6 +4,8 @@ import { PendingProjects, Projects } from '@/lib/db/schema';
 import { authenticateRequest } from '@/lib/middleware/apiAuth';
 import { eq } from 'drizzle-orm';
 import { generateURLName } from '@/utils/generateURLName';
+import { auth } from '@/lib/auth/auth';
+import { headers } from 'next/headers';
 
 /**
  * GET /api/pending-project
@@ -41,6 +43,9 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { title, image, adaProjectID, githubRepoURL, demoURL, studentIds, publishedAt } = body;
+
+        // Get session for user ID
+        const session = await auth.api.getSession({ headers: await headers() });
 
         // Validate required fields
         if (!title || !githubRepoURL || !studentIds) {
@@ -105,6 +110,7 @@ export async function POST(request: NextRequest) {
             githubRepoURL,
             demoURL: demoURL || null,
             studentIds, // Comma-separated string
+            userID: session?.user.id || 'unknown',
             publishedAt: publishedAt ? new Date(publishedAt) : null,
         }).returning();
 
