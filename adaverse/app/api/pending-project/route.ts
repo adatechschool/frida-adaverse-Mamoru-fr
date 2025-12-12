@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             githubRepoURL,
             demoURL: demoURL || null,
             studentIds, // Comma-separated string
-            userID: session?.user?.id || 'unknown',
+            userID: session.user.id, // Guaranteed to exist due to validation check above
             publishedAt: publishedAt ? new Date(publishedAt) : null,
         }).returning();
 
