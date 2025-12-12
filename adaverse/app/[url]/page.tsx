@@ -11,6 +11,7 @@ import { ErrorMessage } from '@/components/interactComponents/ErrorMessage';
 import { externalURLformat } from '@/utils/externalURLformat';
 import { FormatDate } from '@/utils/formatDate';
 import { Image, ArrowLeft, Github, ExternalLink, Calendar, Users, Award, GitBranch, Star, GitFork, AlertCircle, Code2, Tag } from 'lucide-react';
+import { AllComments } from '@/components/Comments/AllComments';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -318,6 +319,9 @@ export default function ProjectDetailPage() {
             </a>
           )}
         </div>
+
+        {/* Comments Section */}
+        <AllComments projectId={project.id} />
       </div>
     </div>
   );

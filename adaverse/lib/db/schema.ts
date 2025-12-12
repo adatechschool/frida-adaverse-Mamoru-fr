@@ -86,6 +86,26 @@ export const PendingProjects = table("pending_projects", {
   publishedAt: timestamp(),
 });
 
+/**
+ * Comments Table
+ * Stores user comments on projects
+ */
+export const Comments = table("comments", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  projectId: integer("project_id")
+    .notNull()
+    .references(() => Projects.id, {onDelete: 'cascade'}),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, {onDelete: 'cascade'}),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
 export const user = table("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),

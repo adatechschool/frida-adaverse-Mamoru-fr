@@ -5,7 +5,6 @@ import React, {useState} from 'react';
 type ModifyCommentProps = {
     comment: {
         id: number;
-        postId: number;
         content: string;
         createdAt: string;
     },
