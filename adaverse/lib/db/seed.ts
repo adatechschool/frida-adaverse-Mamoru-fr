@@ -2,7 +2,7 @@ import db from "./index";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { sql } from "drizzle-orm";
-import { Projects, StudentToProjects } from "./schema";
+import { PendingProjects, Projects, StudentToProjects } from "./schema";
 
 async function runSeed(filePath : string) {
     const sqlContent = readFileSync(join(__dirname, 'migrations', filePath), "utf-8");
@@ -15,12 +15,16 @@ async function backupDataToJson() {
 
     // Récupérer les données des tables
     const projectsBackup = await db.execute(sql`SELECT * FROM projects_students`);
+    const pendingProjectsBackup = await db.execute(sql`SELECT * FROM pending_projects`);
     const studentToProjectsBackup = await db.execute(sql`SELECT * FROM student_to_projects`);
+    const commentsBackup = await db.execute(sql`SELECT * FROM comments`);
 
     // Créer un objet pour le backup
     const backupData = {
         projects_students: projectsBackup.rows,
+        pending_projects: pendingProjectsBackup.rows,
         student_to_projects: studentToProjectsBackup.rows,
+        comments: commentsBackup.rows,
         timestamp: new Date().toISOString(),
     };
 
@@ -65,6 +69,23 @@ async function seed() {
             adaProjectID: row.ada_project_id as number,
             githubRepoURL: row.github_repo_url as string,
             demoURL: row.demo_url as string | null,
+            userID: row.user_id as string,
+            createdAt: row.createdAt ? new Date(row.createdAt as string) : new Date(),
+            publishedAt: row.publishedAt ? new Date(row.publishedAt as string) : null,
+        });
+    }
+
+    for (const row of backupData.pending_projects) {
+        await db.insert(PendingProjects).values({
+            id: row.id as number,
+            title: row.title as string,
+            image: row.image as string,
+            URLName: row.url_name as string,
+            adaProjectID: row.ada_project_id as number,
+            githubRepoURL: row.github_repo_url as string,
+            demoURL: row.demo_url as string | null,
+            studentIds: row.student_ids as string,
+            userID: row.user_id as string,
             createdAt: row.createdAt ? new Date(row.createdAt as string) : new Date(),
             publishedAt: row.publishedAt ? new Date(row.publishedAt as string) : null,
         });
@@ -80,6 +101,25 @@ async function seed() {
             });
         } catch (error) {
             console.log(`⚠️  Skipped orphaned link: student ${row.student_id} no longer exists`);
+        }
+    }
+
+    // Restore comments
+    for (const row of backupData.comments) {
+        try {
+            await db.execute(sql`
+                INSERT INTO comments (id, content, project_id, user_id, created_at, updated_at)
+                VALUES (
+                    ${row.id},
+                    ${row.content},
+                    ${row.project_id},
+                    ${row.user_id},
+                    ${row.created_at},
+                    ${row.updated_at}
+                )
+            `);
+        } catch (error) {
+            console.log(`⚠️  Skipped orphaned comment ID ${row.id}: related project or user no longer exists`);
         }
     }
     

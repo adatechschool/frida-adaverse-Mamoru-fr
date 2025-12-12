@@ -11,6 +11,7 @@ import { PendingProjects, Projects, adaProjects, Students, adaPromotions } from 
 import { readFileSync } from 'fs';
 import { generateURLName } from '../../utils/generateURLName';
 import { normalizeText } from '../../utils/normalizeText';
+import 'dotenv/config';
 
 interface CSVRow {
     promotion: string;
@@ -94,6 +95,13 @@ async function parseCSV(filepath: string): Promise<CSVRow[]> {
 
 async function importCSV(csvPath: string) {
     console.log('\n📂 CSV Import Script\n');
+    
+    // Get USER_AUTH_ID from environment
+    const userAuthId = process.env.USER_AUTH_ID;
+    if (!userAuthId) {
+        throw new Error('USER_AUTH_ID not found in environment variables');
+    }
+    console.log(`✅ Using User ID\n`);
     
     try {
         // Parse CSV
@@ -250,12 +258,13 @@ async function importCSV(csvPath: string) {
             try {
                 await db.insert(PendingProjects).values({
                     title: row.title,
-                    image: imageUrl,
+                    image: imageUrl || '',
                     URLName,
                     adaProjectID,
                     githubRepoURL: row.githubUrl,
                     demoURL: row.demoUrl || null,
                     studentIds: studentIds.join(', '),
+                    userID: userAuthId,
                     publishedAt: null,
                 });
                 

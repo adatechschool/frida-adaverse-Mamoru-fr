@@ -437,7 +437,7 @@ The statistics section uses flexbox with wrap for responsive layout:
 ```tsx
 <div className="flex flex-wrap gap-4">
   {/* Each card has flex-1 with minimum widths */}
-  <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)]">
+  <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)]">
     {/* Card content */}
   </div>
 </div>
@@ -757,7 +757,7 @@ La section statistiques utilise flexbox avec wrap pour un layout responsive:
 ```tsx
 <div className="flex flex-wrap gap-4">
   {/* Chaque carte a flex-1 avec largeurs minimales */}
-  <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)]">
+  <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)]">
     {/* Contenu de la carte */}
   </div>
 </div>

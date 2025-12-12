@@ -48,14 +48,11 @@ async function approveProjects() {
         // 2. Execute each block sequentially
 
         console.log('🚀 Executing approved projects...');
-        console.log('SQLBlock : ', sqlBlocks);
         for (const block of sqlBlocks) {
             try {
                 // Add the final semicolon if missing
                 const fullQuery = block.endsWith(';') ? block : `${block};`;
-                console.log('SQL Block to execute :', fullQuery);
                 await db.execute(sql.raw(fullQuery));
-                console.log(`✅ Successfully executed block:\n${block.substring(0, 100)}...`);
             } catch (err) {
                 console.error(`❌ Error executing block:`, err);
                 throw err; // Stop if an error occurs

@@ -9,16 +9,21 @@ import {AddProjectProvider} from "@/context/AddProjectContext";
 import AddProjectModal from "@/components/AddProject/AddProjectModal";
 import NavbarContent from "@/components/NavbarContent";
 import {PromotionFilterProvider} from "@/context/PromotionFilterContext";
+import {SessionProvider} from "@/context/SessionContext";
+import {auth} from "@/lib/auth/auth";
+import {headers} from "next/headers";
 
 export const metadata: Metadata = {
   title: "AdaVerse",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth.api.getSession({headers: await headers()});
+  
   return (
     <html lang="en">
       <body
@@ -31,6 +36,7 @@ export default function RootLayout({
                 <StudentProjectsProvider>
                   <AddProjectProvider>
                     <PromotionFilterProvider>
+                      <SessionProvider session={session}>
                       <div className="min-h-screen bg-white dark:bg-neutral-950 font-sans text-neutral-900 dark:text-white transition-colors" >
                         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 transition-colors">
                           <NavbarContent />
@@ -40,6 +46,7 @@ export default function RootLayout({
                         </div>
                         <AddProjectModal />
                       </div>
+                      </SessionProvider>
                     </PromotionFilterProvider>
                   </AddProjectProvider>
                 </StudentProjectsProvider>

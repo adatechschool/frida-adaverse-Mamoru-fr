@@ -11,6 +11,7 @@ import { ErrorMessage } from '@/components/interactComponents/ErrorMessage';
 import { externalURLformat } from '@/utils/externalURLformat';
 import { FormatDate } from '@/utils/formatDate';
 import { Image, ArrowLeft, Github, ExternalLink, Calendar, Users, Award, GitBranch, Star, GitFork, AlertCircle, Code2, Tag } from 'lucide-react';
+import { AllComments } from '@/components/Comments/AllComments';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -77,7 +78,7 @@ export default function ProjectDetailPage() {
     : [];
 
   return (
-    <div className="min-h-screen px-8 py-8 md:px-16 md:py-12">
+    <div className="min-h-screen px-8 py-8 lg:px-16 lg:py-12">
       {/* Back Button */}
       <button
         onClick={() => router.push('/')}
@@ -90,7 +91,7 @@ export default function ProjectDetailPage() {
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+          <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-5xl">
             {project.title}
           </h1>
           {adaProject && (
@@ -118,7 +119,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* Info Grid */}
-        <div className="mb-8 grid gap-6 md:grid-cols-2">
+        <div className="mb-8 grid gap-6 lg:grid-cols-2">
 
           {/* Created Date */}
           <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
@@ -188,14 +189,14 @@ export default function ProjectDetailPage() {
           <div className="mb-8">
             <h2 className="mb-4 text-2xl font-semibold">Statistiques du dépôt</h2>
             <div className="flex flex-wrap gap-4">
-              <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+              <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
                 <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
                   <Star className="h-4 w-4" />
                   <span className="text-sm font-medium">Stars</span>
                 </div>
                 <p className="text-2xl font-bold">{repoData.stargazers_count}</p>
               </div>
-              <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+              <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
                 <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
                   <GitFork className="h-4 w-4" />
                   <span className="text-sm font-medium">Forks</span>
@@ -205,7 +206,7 @@ export default function ProjectDetailPage() {
               
               {/* Issues Stats */}
               {issueStats && (
-                <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
                   <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
                     <AlertCircle className="h-4 w-4" />
                     <span className="text-sm font-medium">Issues</span>
@@ -219,7 +220,7 @@ export default function ProjectDetailPage() {
 
               {/* Pull Requests */}
               {pullRequestStats && (
-                <div className="flex-1 min-w-[calc(50%-0.5rem)] md:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+                <div className="flex-1 min-w-[calc(50%-0.5rem)] lg:min-w-[calc(25%-0.75rem)] rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
                   <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-2">
                     <GitBranch className="h-4 w-4" />
                     <span className="text-sm font-medium">Pull Requests</span>
@@ -318,6 +319,9 @@ export default function ProjectDetailPage() {
             </a>
           )}
         </div>
+
+        {/* Comments Section */}
+        <AllComments projectId={project.id} />
       </div>
     </div>
   );

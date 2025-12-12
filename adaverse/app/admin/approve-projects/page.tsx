@@ -7,6 +7,9 @@ import { CombinedColors } from '@/content/Colors';
 import { useState } from 'react';
 import { X, CheckCheck } from 'lucide-react';
 import { PendingProjectCard } from '@/components/admin/PendingProjectCard';
+import { AdminNavigation } from '@/components/admin/AdminNavigation';
+import {useSession} from '@/context/SessionContext';
+import {redirect} from 'next/navigation';
 
 export default function ApproveProjectsPage() {
     const { pendingProjects, fetchPendingProjects } = useAddProject();
@@ -14,6 +17,12 @@ export default function ApproveProjectsPage() {
     const { listStudents } = useStudents();
     const [loading, setLoading] = useState<number | null>(null);
     const [hiddenProjects, setHiddenProjects] = useState<Set<number>>(new Set());
+    const {session} = useSession();
+
+    // If not admin, show access denied
+    if (!session || session.user.role !== 'admin') {
+        redirect('/')
+    }
 
     // Helper function to get project name by ID
     const getProjectName = (projectId: number | null) => {
@@ -159,6 +168,7 @@ export default function ApproveProjectsPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <AdminNavigation />
             <div className="flex items-center justify-between mb-8">
                 <h1 className={`text-3xl font-bold ${CombinedColors.text.primary}`}>
                     Projets en attente d'approbation

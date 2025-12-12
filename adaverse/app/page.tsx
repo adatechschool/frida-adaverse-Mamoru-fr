@@ -7,11 +7,13 @@ import {useStudentProjects} from "@/context/StudentProjectsContext";
 import {Loading} from "@/components/interactComponents/Loading";
 import {ErrorMessage} from "@/components/interactComponents/ErrorMessage";
 import {usePromotionFilter} from "@/context/PromotionFilterContext";
+import {useSession} from "@/context/SessionContext";
 
 export default function Home() {
   const {listAdaProjects, loading: projectsLoading, error: projectsError} = useAdaProjects();
   const {listStudentProjects, loading: studentProjectsLoading, error: studentProjectsError} = useStudentProjects();
   const {selectedPromotion} = usePromotionFilter();
+  const {session} = useSession();
 
   // Show loading state
   if (projectsLoading || studentProjectsLoading) {
@@ -24,17 +26,18 @@ export default function Home() {
   }
 
   // Filter projects by promotion if selected
-  const filteredProjects = selectedPromotion 
+  const filteredProjects = selectedPromotion
     ? listStudentProjects.filter((p: Project) => {
-        if (!p.students || p.students.length === 0) return false;
-        return p.students[0].promotionId === selectedPromotion;
-      })
+      if (!p.students || p.students.length === 0) return false;
+      return p.students[0].promotionId === selectedPromotion;
+    })
     : listStudentProjects;
 
   return (
     <div>
+      {/* <pre>{session ? JSON.stringify(session.user, null, 2) : "Not connected"}</pre> */}
       {/* Categories */}
-      <div className="space-y-10 px-8 py-16 md:px-16">
+      <div className="space-y-10 px-8 py-16 lg:px-16">
         {listAdaProjects.map((project: adaProject) => {
           const studentProjects = filteredProjects
             .filter((p: Project) => p.adaProjectID === project.id)
@@ -44,22 +47,22 @@ export default function Home() {
               if (!b.publishedAt) return -1;
               return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
             });
-          
+
           if (studentProjects.length === 0) return null;
 
           return (
             <div key={project.id}>
               {/* Category Header */}
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+                <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
                   {project.projectName}
                 </h2>
               </div>
 
               {/* Scrollable Row */}
-              <div className="scrollbar-hide -mx-8 flex gap-4 overflow-x-auto px-8 md:-mx-16 md:px-16">
+              <div className="scrollbar-hide -mx-8 flex gap-4 overflow-x-auto px-8 lg:-mx-16 lg:px-16">
                 {studentProjects.map((sp: Project) => (
-                  <div key={sp.id} className="shrink-0 w-[280px] sm:w-[350px] md:w-[400px]">
+                  <div key={sp.id} className="shrink-0 w-[280px] sm:w-[350px] lg:w-[400px]">
                     <ProjectCard project={sp} />
                   </div>
                 ))}

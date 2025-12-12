@@ -35,7 +35,7 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="px-8 py-16 md:px-16">
+    <div className="px-8 py-16 lg:px-16">
       <div className="w-full mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -59,7 +59,7 @@ export default function SearchPage() {
           </div>
 
           {/* Dropdowns and Sort */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Promotion Filter */}
             <select
               value={selectedPromotion === null ? '' : selectedPromotion.toString()}
@@ -117,7 +117,7 @@ export default function SearchPage() {
         ) : (
           <div className="flex flex-wrap justify-center gap-6">
             {filteredProjects.map((project) => (
-              <div key={project.id} className="flex-1 min-w-[280px] md:min-w-[320px]">
+              <div key={project.id} className="flex-1 min-w-[280px] lg:min-w-[320px]">
                 <ProjectCard project={project} />
               </div>
             ))}
