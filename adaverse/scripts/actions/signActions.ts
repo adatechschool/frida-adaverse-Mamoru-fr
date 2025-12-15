@@ -26,8 +26,8 @@ export const signup = async (formData: FormData) => {
         asResponse: true,
     });
     if (!response.ok) {
-        console.error("Sign in failed:", await response.json());
-        redirect("/auth/signup?error=true");
+        console.error("Sign up failed:", await response.json());
+        redirect("/connections?error=signup");
     }
     redirect("/"); // on redirige vers la home page une fois connecté
 };
@@ -47,7 +47,7 @@ export const signin = async (formData: FormData) => {
     });
     if (!response.ok) {
         console.error("Sign in failed:", await response.json());
-        redirect("/auth/signin?error=true");
+        redirect("/connections?error=signin");
     }
     redirect("/"); // on redirige vers la home page une fois connecté
 };

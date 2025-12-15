@@ -1,12 +1,27 @@
 'use client';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {signin, signup} from "@/scripts/actions/signActions"
 import { CombinedColors } from '@/content/Colors';
+import { useSearchParams } from 'next/navigation';
 
 export default function ConnectionsPage() {
     const [view, setView] = useState<"signin" | "signup">("signin");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const error = searchParams.get('error');
+        if (error === 'signup') {
+            setErrorMessage("Échec de l'inscription. Veuillez réessayer.");
+            setView('signup');
+        } else if (error === 'signin') {
+            setErrorMessage("Échec de la connexion. Vérifiez vos identifiants.");
+            setView('signin');
+        }
+    }, [searchParams]);
 
     const toggleView = () => {
+        setErrorMessage(""); // Clear error when toggling views
         setView(view === 'signin' ? 'signup' : 'signin');
     };
 
@@ -16,6 +31,13 @@ export default function ConnectionsPage() {
                 <h1 className="text-2xl font-semibold text-center mb-6 text-neutral-900 dark:text-white tracking-tight">
                     {view === 'signin' ? 'Connexion' : 'Inscription'}
                 </h1>
+
+                {/* Error Message */}
+                {errorMessage && (
+                    <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                        <p className="text-sm text-red-800 dark:text-red-200">{errorMessage}</p>
+                    </div>
+                )}
 
                 {/* Formulaire de connexion */}
                 {view === 'signin' && (
